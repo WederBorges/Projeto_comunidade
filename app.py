@@ -1,10 +1,18 @@
-from flask import Flask
+import time
+from flask import Flask, render_template
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello, World !"
+    return render_template('home.html')
+
+@app.route('/usuarios')
+def users():
+    lista_usuarios = ['Weder', 'Md dador de cesso', "marco bobó chera chera"]
+
+    return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
 if __name__ == "__main__":
     app.run(debug=True) #Nunca usar isso em prod
