@@ -10,7 +10,7 @@ def home():
 
 @app.route('/usuarios')
 def users():
-    lista_usuarios = ['Weder', 'Md dador de cesso', "marco bobó chera chera"]
+    lista_usuarios = ["Nicolau BOBO CHERA CHERA"]
 
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
