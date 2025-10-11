@@ -1,0 +1,53 @@
+{% extends 'home.html' %}
+
+{% block body %}
+
+<div class="container mt-5">
+  <h1 class="text-center">Faça seu login aqui, Padawan!</h1>
+
+  <div class="d-flex justify-content-between mt-5">
+    <!-- FORM LOGIN -->
+    <div style="width: 48%;">
+      <form>
+        <div class="mb-3">
+          <div class="form-text">Realize seu login aqui</div>
+          <label for="emailLogin" class="form-label">E-mail</label>
+          <input type="email" class="form-control" id="emailLogin">
+          <div class="form-text">oiii</div>
+        </div>
+        <div class="mb-3">
+          <label for="senhaLogin" class="form-label">Digite sua senha</label>
+          <input type="password" class="form-control" id="senhaLogin">
+        </div>
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="lembrarLogin">
+          <label class="form-check-label" for="lembrarLogin">Lembrar login</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Logar</button>
+      </form>
+    </div>
+
+    <!-- FORM CADASTRO -->
+    <div style="width: 48%;">
+      <form>
+        <div class="mb-3">
+          <div class="form-text">Cadastre-se aqui</div>
+          <label for="emailCadastro" class="form-label">E-mail</label>
+          <input type="email" class="form-control" id="emailCadastro">
+          <div class="form-text">oiii</div>
+        </div>
+        <div class="mb-3">
+          <label for="senhaCadastro" class="form-label">Digite sua senha</label>
+          <input type="password" class="form-control" id="senhaCadastro">
+        </div>
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="lembrarCadastro">
+          <label class="form-check-label" for="lembrarCadastro">Lembrar login</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Realizar Cadastro</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
