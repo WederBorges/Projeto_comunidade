@@ -1,8 +1,10 @@
 import time
 from flask import Flask, render_template, url_for
-
+from forms import Form_Criar_Conta, Form_Login
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = '355fcc96736a56eb286df457be1f3597e6e4400d11baed7dccd4f23b76fd0da3262bb29aa85137b88972de87ee11cffca5cd'
 
 @app.route('/')
 def home():
@@ -19,8 +21,10 @@ def contato():
     return render_template('contato.html')
 
 @app.route('/login', methods=['GET', 'POST'])
-def login(): 
-    return render_template('login.html')
+def login():
+    form_login = Form_Login() 
+    form_criar_conta = Form_Criar_Conta()
+    return render_template('login.html', form_login=form_login, form_criar_conta=form_criar_conta)
 
 if __name__ == "__main__":
     app.run(debug=True) #Nunca usar isso em prod
