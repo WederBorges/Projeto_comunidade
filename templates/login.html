@@ -3,29 +3,51 @@
 {% block body %}
 
 <div class="container-fluid">
+  <h1>Faça o Login ou Crie sua conta !</h1>
+  <hr>
   <div class="row">
   <div class="col">
-    Realize seu Login
-    {{ form_login.email_login.label }}
-    {{ form_login.email_login }}
-    {{ form_login.senha_login.label }}
-    {{ form_login.senha_login }}
-    {{ form_login.botao_submit_login }}
-    {{ form_login.lembrar_dados.label }}
-    {{ form_login.lembrar_dados }}
+    <form method="POST" action="" class="border p-4 m-5" >
+      <legend>Realize seu Login</legend>
+      <fieldset>
+        <div class="form-group">
+          {{ form_login.email_login.label(class='form-control-label') }}
+          {{ form_login.email_login(class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ form_login.senha_login.label(class='form-control-label') }}
+          {{ form_login.senha_login(class='form-control')  }}
+        </div>
+      {{ form_login.lembrar_dados.label(class='form-check-label') }}
+      {{ form_login.lembrar_dados(class='form-check-input') }}
+      </fieldset>
+      {{ form_login.botao_submit_login(class="btn btn-primary mt-4") }}
+    </form>
   </div>
-  <div class="col">
-    Realize seu cadastro
-    {{ form_criar_conta.user_name.label }}
-    {{ form_criar_conta.user_name }}
-    {{ form_criar_conta.email_cadastro.label }}
-    {{ form_criar_conta.email_cadastro }}
-    {{ form_criar_conta.senha_cadastro.label }}
-    {{ form_criar_conta.senha_cadastro }}
-    {{ form_criar_conta.confirmar_senha.label }}
-    {{ form_criar_conta.confirmar_senha }}
-    {{ form_criar_conta.botao_submit_criar_conta }}
 
+  <div class="col">
+    <form method="POST" action="", class="border p-4 mt-5">
+    <legend>Realize seu cadastro</legend>
+    <fieldset>
+        <div class="form-group">
+          {{ form_criar_conta.user_name.label(class='form-control-label') }}
+          {{ form_criar_conta.user_name(class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ form_criar_conta.email_cadastro.label(class='form-control-label') }}
+          {{ form_criar_conta.email_cadastro(class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ form_criar_conta.senha_cadastro.label(class='form-control-label') }}
+          {{ form_criar_conta.senha_cadastro(class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ form_criar_conta.confirmar_senha.label(class='form-control-label') }}
+          {{ form_criar_conta.confirmar_senha(class='form-control') }}
+        </div>
+      </fieldset>
+      {{ form_criar_conta.botao_submit_criar_conta(class="btn btn-primary mt-4") }}
+    </form>
   </div>
   </div>
 </div>
