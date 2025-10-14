@@ -8,7 +8,7 @@ class Form_Criar_Conta(FlaskForm):
     user_name = StringField("Nome de Usuário", validators=[DataRequired(), Length(3, 20)])
     email_cadastro = StringField("E-mail", validators=[DataRequired(),Email()])
     senha_cadastro = PasswordField("Senha", validators=[DataRequired(), Length(6, 50)])
-    confirmar_senha = PasswordField("Confirmar senha", validators=[DataRequired(), Length(6, 50), EqualTo('senha')])
+    confirmar_senha = PasswordField("Confirmar senha", validators=[DataRequired(), Length(6, 50), EqualTo('senha_cadastro')])
     botao_submit_criar_conta = SubmitField("Criar Conta")
 
 class Form_Login(FlaskForm):
