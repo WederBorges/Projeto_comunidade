@@ -13,10 +13,30 @@
       <fieldset>
         <div class="form-group">
           {{ form_login.email_login.label(class='form-control-label') }}
+          
+          {% if form_login.email_login.errors %}
+            {%for erro in form_login.email_login.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{erro}}
+            </div>
+            {% endfor %}
+          {% endif %}
+
+
           {{ form_login.email_login(class='form-control') }}
         </div>
         <div class="form-group">
           {{ form_login.senha_login.label(class='form-control-label') }}
+          
+          {% if form_login.senha_login.errors %}
+          
+            {%for erro in form_login.senha_login.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{erro}}
+            </div>
+            {% endfor %}
+          {% endif %}
+
           {{ form_login.senha_login(class='form-control')  }}
         </div>
       {{ form_login.lembrar_dados.label(class='form-check-label') }}
