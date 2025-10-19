@@ -1,4 +1,4 @@
-from comunidade_im.main import app, database
+from main import app, database
 from comunidade_im.models import Usuario, Post
 
 #with app.app_context():

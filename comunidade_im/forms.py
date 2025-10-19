@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from comunidade_im.models import Usuario
 
 
 class Form_Criar_Conta(FlaskForm):
@@ -11,8 +11,14 @@ class Form_Criar_Conta(FlaskForm):
     confirmar_senha = PasswordField("Confirmar senha", validators=[DataRequired(), Length(6, 50), EqualTo('senha_cadastro')])
     botao_submit_criar_conta = SubmitField("Criar Conta")
 
+    def validate_email_cadastro(self, email_cadastro):
+        usuario = Usuario.query.filter_by(email_cadastro=email_cadastro.data).first()
+        if usuario:
+            raise ValidationError('Email já cadastrado. Utilize outro E-mail ou faça Login para continuar.')
+
 class Form_Login(FlaskForm):
     email_login = StringField("E-mail", validators=[DataRequired(),Email()])
     senha_login = PasswordField("Senha", validators=[DataRequired(), Length(6, 50)])
     botao_submit_login = SubmitField("Realizar Login")
     lembrar_dados = BooleanField('Lembrar dados')
+
