@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from comunidade_im import app, database, bcrypt
-from comunidade_im.forms import Form_Login, Form_Criar_Conta
+from comunidade_im.forms import Form_Login, Form_Criar_Conta, Form_EditarPerfil
 from comunidade_im.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -62,9 +62,16 @@ def sair():
 @app.route('/perfil')
 @login_required
 def perfil():
-    return render_template('perfil.html')
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
+    return render_template('perfil.html',usuario=current_user, foto_perfil=foto_perfil)
 
 @app.route('/post/criar')
 @login_required
 def criar_post():
     return render_template('criarpost.html')
+
+@app.route('/perfil/editar')
+@login_required
+def editar_perfil():
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
+    return render_template('editar_pefil.html', usuario=current_user, foto_perfil=foto_perfil)

@@ -22,3 +22,7 @@ class Form_Login(FlaskForm):
     botao_submit_login = SubmitField("Realizar Login")
     lembrar_dados = BooleanField('Lembrar dados')
 
+class Form_EditarPerfil(FlaskForm):
+    user_name = StringField("Nome de Usuário", validators=[DataRequired(), Length(3, 20)])
+    email_cadastro = StringField("E-mail", validators=[DataRequired(),Email()])
+    botao_editar_perfil = SubmitField("Editar Perfil")
