@@ -70,8 +70,9 @@ def perfil():
 def criar_post():
     return render_template('criarpost.html')
 
-@app.route('/perfil/editar')
+@app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
+    form = Form_EditarPerfil()
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
-    return render_template('editar_pefil.html', usuario=current_user, foto_perfil=foto_perfil)
+    return render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form)
