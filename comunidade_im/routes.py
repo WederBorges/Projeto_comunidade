@@ -74,5 +74,24 @@ def criar_post():
 @login_required
 def editar_perfil():
     form = Form_EditarPerfil()
+    
+    if request.method == "GET":
+        form.email_cadastro.data = current_user.email_cadastro 
+        form.user_name.data = current_user.user_name 
+        
+  
+    if form.validate_on_submit():
+        current_user.email_cadastro = form.email_cadastro.data
+        current_user.user_name = form.user_name.data
+        database.session.commit()
+        flash("Perfil atualizado com sucesso", "primary")
+        redirect(url_for('perfil'))
+    else:
+        if form.foto_perfil.errors:
+            for erro in form.foto_perfil.errors:
+                flash(f"Houve um erro: {erro} ao tentar subir novo arquivo de foto.", "danger")
+    print(form.foto_perfil.errors)
+
+    
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
     return render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form)
