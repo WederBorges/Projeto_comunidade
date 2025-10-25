@@ -52,11 +52,25 @@
                 <span class="text-danger">{{ erro }}</span><br>
                 {% endfor %}
               {% endif %}
-
-
-          </div>
           
-
+            </div>
+            <hr>
+            <P> Cursos </P>
+            <div class="container-fluid btn-group">      
+              {{ form.curso_excel.label(class='form-check-label') }}
+              {{ form.curso_excel(class='form-check-input') }}
+        
+                
+              {{ form.curso_excel.label(class='form-check-label') }}
+              {{ form.curso_excel(class='form-check-input') }}
+               
+              {{ form.curso_excel.label(class='form-check-label') }}
+              {{ form.curso_excel(class='form-check-input') }}
+                
+              {{ form.curso_excel.label(class='form-check-label') }}
+              {{ form.curso_excel(class='form-check-input') }}
+            </div>
+            
       </fieldset>
       {{ form.botao_editar_perfil(class="btn btn-primary mt-4") }}
     </form>

@@ -3,6 +3,9 @@ from comunidade_im import app, database, bcrypt
 from comunidade_im.forms import Form_Login, Form_Criar_Conta, Form_EditarPerfil
 from comunidade_im.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
+import secrets
+import os
+from PIL import Image
 
 @app.route('/')
 def home():
@@ -70,6 +73,24 @@ def perfil():
 def criar_post():
     return render_template('criarpost.html')
 
+
+def salvar_imagem(imagem):
+    codigo = secrets.token_hex(8)
+    nome, extensao = os.path.splitext(imagem.filename)
+    nome_arquivo = nome + codigo + extensao
+    caminho_completo = os.path.join(app.root_path, 'static/fotos_perfil', nome_arquivo)
+    
+    tamanho = (400, 400)
+    img_reduzida = Image.open(imagem)
+    img_reduzida.thumbnail(tamanho)
+
+    img_reduzida.save(caminho_completo)
+    return nome_arquivo
+# adicionar um codigo aleatorio na imagem
+# reduzir o tamanho da imagem
+# salvo a imagem no fotos_perfil
+# altero a imagem do usuario
+
 @app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
@@ -83,6 +104,10 @@ def editar_perfil():
     if form.validate_on_submit():
         current_user.email_cadastro = form.email_cadastro.data
         current_user.user_name = form.user_name.data
+        if form.foto_perfil.data:
+            nome_imagem = salvar_imagem(form.foto_perfil.data)
+            current_user.foto_perfil = nome_imagem
+
         database.session.commit()
         flash("Perfil atualizado com sucesso", "primary")
         redirect(url_for('perfil'))
