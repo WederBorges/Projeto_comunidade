@@ -5,9 +5,16 @@ teste1 = 'default.jpg'
 nome, extensao = os.path.splitext(teste1)
 cod = secrets.token_hex(4)
 
-t = os.path.join(nome,cod,extensao)
-t2 = nome + cod + extensao
+def teste():
+    lista = []
+    nomes = 'weder', 'joao', 'pedra'
 
-print(t)
+    for n in nomes:
+        lista.append(n)
 
-print(t2)
+    print(lista)
+
+    return ';'.join(lista)
+
+teste()
+    

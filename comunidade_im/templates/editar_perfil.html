@@ -56,19 +56,17 @@
             </div>
             <hr>
             <P> Cursos </P>
-            <div class="container-fluid btn-group">      
-              {{ form.curso_excel.label(class='form-check-label') }}
-              {{ form.curso_excel(class='form-check-input') }}
-        
-                
-              {{ form.curso_excel.label(class='form-check-label') }}
-              {{ form.curso_excel(class='form-check-input') }}
-               
-              {{ form.curso_excel.label(class='form-check-label') }}
-              {{ form.curso_excel(class='form-check-input') }}
-                
-              {{ form.curso_excel.label(class='form-check-label') }}
-              {{ form.curso_excel(class='form-check-input') }}
+            <div class="container  ms-2 ">      
+              {% for campo in form %}
+                {% if 'curso_' in campo.name   %}
+
+                  {{ campo(class='form-check-input') }}
+                  {{campo.label}}
+                  
+                  <hr>
+                {% endif %} 
+              {% endfor%}
+              
             </div>
             
       </fieldset>
