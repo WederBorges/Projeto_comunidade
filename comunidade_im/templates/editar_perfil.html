@@ -31,11 +31,11 @@
         <div class="form-group">
           {{ form.email_cadastro.label(class='form-control-label') }}
           
-              {% if form.email_cadastro.errors %}
+             {% if form.email_cadastro.errors %}
                 {{ form.email_cadastro(class='form-control is-invalid') }}
                 <div class="invalid-feedback">
                   {% for erro in form.email_cadastro.errors %}
-                    {{ erro }}
+                      {{ erro }}
                   {% endfor %}
                 </div>
               {% else %}
@@ -47,9 +47,9 @@
               {{form.foto_perfil.label}}
               {{form.foto_perfil(class="form-control-file")}}
 
-              {% if foto_perfil.errors %}
+              {% if form.foto_perfil.errors %}
                 {% for erro in form.foto_perfil.errors %}
-                <span class="text-danger">{{ erro }}</span><br>
+                  <span class="text-danger">{{ erro }}</span><br>
                 {% endfor %}
               {% endif %}
           
@@ -58,14 +58,14 @@
             <P> Cursos </P>
             <div class="container  ms-2 ">      
               {% for campo in form %}
-                {% if 'curso_' in campo.name   %}
+                  {% if 'curso_' in campo.name   %}
 
-                  {{ campo(class='form-check-input') }}
-                  {{campo.label}}
+                    {{ campo(class='form-check-input') }}
+                    {{campo.label}}
                   
-                  <hr>
-                {% endif %} 
-              {% endfor%}
+                    <hr>
+                  {% endif %} 
+              {% endfor %}
               
             </div>
             
@@ -73,6 +73,6 @@
       {{ form.botao_editar_perfil(class="btn btn-primary mt-4") }}
     </form>
   </div>
-
+</div>
 
 {% endblock %}

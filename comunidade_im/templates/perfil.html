@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<body>
-    <divc class="container">
+    <div class="container">
     <h1>Olá, {{ usuario.user_name }}</h1>
     <div class="container mt-5 d-flex justify-content-center">
 
@@ -11,7 +10,7 @@
                 <div class="d-flex align-items-center">
 
                     <div class="{{image}} pe-2">
-                <img src= {{foto_perfil}} class="rounded" width="180" >
+                <img src= "{{foto_perfil}}" class="rounded" width="180" >
                 </div>
 
                 <div class="ml-3 w-100">
@@ -25,9 +24,7 @@
 
                         <span class="articles">Cursos</span>
                         <span class="number1">
-                            {% for curso in usuario.cursos %}
-                                {{curso}}
-                            { % endfor %}
+                            {{ total_cursos }}
                         </span>
                         
                     </div>
@@ -62,8 +59,13 @@
              
          </div>
     </div>
-</body>
-
+<div class="row justify-content-center">
+    <div class="col col-4" style="text-align: center;">
+        <h6><strong>Cursos</strong><br></h6>
+         {% for curso in current_user.cursos.split(';') %}
+        <button type="button" class="bi bi-code-slash"> {{ curso }} </button>
+        {% endfor %}
+    </div>
 {% block editar_perfil %}
 {% endblock %}
 {% endblock %}

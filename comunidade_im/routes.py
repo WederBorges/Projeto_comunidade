@@ -65,9 +65,17 @@ def sair():
 @app.route('/perfil')
 @login_required
 def perfil():
-    cursos = Usuario()
+    cursos = current_user.cursos
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
-    return render_template('perfil.html',usuario=current_user, foto_perfil=foto_perfil, cursos=cursos)
+
+    if "Não informado" in cursos:
+        total_cursos = 0
+    else:
+        total_cursos = len(cursos.split(';')) 
+
+    return render_template('perfil.html',usuario=current_user, foto_perfil=foto_perfil, total_cursos=total_cursos)
+
+
 
 @app.route('/post/criar')
 @login_required
