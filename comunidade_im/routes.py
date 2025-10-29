@@ -14,9 +14,14 @@ def home():
 @app.route('/usuarios')
 @login_required
 def users():
-    lista_usuarios = ["Nicolau BOBO CHERA CHERA"]
+    lista_usuarios = [usuario for usuario in Usuario.query.all()]
+    cursos = current_user.cursos
+    if "Não informado" in cursos or cursos =="":
+        total_cursos = 0
+    else:
+        total_cursos = len(cursos.split(';')) 
 
-    return render_template('usuarios.html', lista_usuarios=lista_usuarios)
+    return render_template('usuarios.html', lista_usuarios=lista_usuarios, total_cursos=total_cursos)
 
 @app.route('/contato')
 @login_required
@@ -68,7 +73,7 @@ def perfil():
     cursos = current_user.cursos
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
 
-    if "Não informado" in cursos:
+    if "Não informado" in cursos or cursos =="":
         total_cursos = 0
     else:
         total_cursos = len(cursos.split(';')) 
@@ -103,7 +108,8 @@ def atualizar_cursos(form):
     lista_cursos = []
     for campo in form:
         if 'curso_' in campo.name:
-            lista_cursos.append(campo.label.text) 
+            if campo.data==True:
+                lista_cursos.append(campo.label.text) 
     return ';'.join(lista_cursos)
 
 
@@ -111,6 +117,7 @@ def atualizar_cursos(form):
 @login_required
 def editar_perfil():
     form = Form_EditarPerfil()
+    cursos = current_user.cursos
     
     if request.method == "GET":
         form.email_cadastro.data = current_user.email_cadastro 
@@ -133,6 +140,12 @@ def editar_perfil():
                 flash(f"Houve um erro: {erro} ao tentar subir novo arquivo de foto.", "danger")
     print(form.foto_perfil.errors)
 
+    if "Não informado" in cursos or cursos =="":
+        total_cursos = 0
+    else:
+        total_cursos = len(cursos.split(';')) 
     
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
-    return render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form)
+    
+    return  render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form, total_cursos=total_cursos)
+
