@@ -12,7 +12,7 @@ class Usuario(database.Model, UserMixin):
     email_cadastro = database.Column(database.String, nullable=False, unique=True)
     senha_cadastro = database.Column(database.String, nullable=False)
     foto_perfil =  database.Column(database.String, default='default.jpg')
-    posts = database.relationship('Post', backref='Autor', lazy=True)
+    posts = database.relationship('Post', backref='autor', lazy=True)
     cursos = database.Column(database.String, nullable=False, default="Não Informado")
 
 class Post(database.Model):

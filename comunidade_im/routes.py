@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from comunidade_im import app, database, bcrypt
-from comunidade_im.forms import Form_Login, Form_Criar_Conta, Form_EditarPerfil
+from comunidade_im.forms import Form_Login, Form_Criar_Conta, Form_EditarPerfil, Form_Criar_Post
 from comunidade_im.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
 import secrets
@@ -9,7 +9,9 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    cursos = current_user.cursos
+    posts = Post.query.all()
+    return render_template('home.html', posts=posts, cursos=cursos)
 
 @app.route('/usuarios')
 @login_required
@@ -82,10 +84,19 @@ def perfil():
 
 
 
-@app.route('/post/criar')
+@app.route('/post/criar', methods=['GET', 'POST'])
 @login_required
 def criar_post():
-    return render_template('criarpost.html')
+    form = Form_Criar_Post()
+    if form.validate_on_submit():
+        post = Post(titulo=form.titulo.data, 
+                    corpo=form.corpo.data,
+                    autor = current_user)
+        database.session.add(post)
+        database.session.commit()
+        flash('Post criado com sucesso', 'alert-sucess')
+        return redirect(url_for('home'))
+    return render_template('criarpost.html', form=form)
 
 
 def salvar_imagem(imagem):
