@@ -4,3 +4,6 @@ __pycache__/
 *.pyo
 *.db
 .DS_Store
+*.exe
+*.msi
+*.dmg
