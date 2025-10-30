@@ -7,3 +7,6 @@ __pycache__/
 *.exe
 *.msi
 *.dmg
+*.exe
+*.msi
+*.dmg
