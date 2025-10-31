@@ -11,15 +11,15 @@
     {% for post in posts %}
     <div class="row border mt-4 p-2 meupost">
       <div class="col col-3">
-
+          <h4><strong>{{post.autor.user_name}}</strong></h4>
           <div class="{{image}} pe-2">
-            <img src= "{{url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))}}" class="rounded" width="180" >
+            <img src= "{{url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_perfil))}}" class="rounded" width="180" >
           </div>
           <div>
             <h6><strong>Cursos</strong><br></h6>
-             {% for curso in current_user.cursos.split(';') %}
-            <button type="button" class="bi bi-code-slash"> {{ curso }} </button>
-            {% endfor %}
+              {% for curso in post.autor.cursos.split(';') %}
+                <span class="badge rounded-pill text-bg-secondary d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2">{{ curso }}</span>
+              {% endfor %}
           </div>
 
       </div>

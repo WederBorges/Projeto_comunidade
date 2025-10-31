@@ -9,8 +9,11 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    cursos = current_user.cursos
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.id.desc())
+    cursos = None
+    if current_user.is_authenticated:
+        cursos = current_user.cursos
+
     return render_template('home.html', posts=posts, cursos=cursos)
 
 @app.route('/usuarios')
@@ -24,7 +27,6 @@ def users():
         total_cursos = len(cursos.split(';')) 
 
     return render_template('usuarios.html', lista_usuarios=lista_usuarios, total_cursos=total_cursos)
-
 @app.route('/contato')
 @login_required
 def contato():
@@ -160,3 +162,8 @@ def editar_perfil():
     
     return  render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form, total_cursos=total_cursos)
 
+@app.route('/post/<post_id>')
+def exibir_post(post_id):
+    post = Post.query.get(post_id)
+
+    return render_template('exibir_post.html', post=post)

@@ -28,7 +28,11 @@
 
                                 <span class="articles">Cursos</span>
                                 <span class="number1">
-                                    {{ total_cursos }}
+                                    {% if usuario.cursos and usuario.cursos != "Não Informado" %}
+                                        {{ usuario.cursos.split(';')|length }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
                                 </span>
                                 
                             </div>
