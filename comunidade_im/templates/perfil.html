@@ -10,7 +10,7 @@
                 <div class="d-flex align-items-center">
 
                     <div class="{{image}} pe-2">
-                <img src= "{{foto_perfil}}" class="rounded" width="180" >
+                <img src= "{{url_for('static', filename='fotos_perfil/{}'.format(usuario.foto_perfil))}}" class="rounded" width="180" >
                 </div>
 
                 <div class="ml-3 w-100">

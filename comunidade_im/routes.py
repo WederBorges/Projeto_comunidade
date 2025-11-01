@@ -162,8 +162,26 @@ def editar_perfil():
     
     return  render_template('editar_perfil.html', usuario=current_user, foto_perfil=foto_perfil, form=form, total_cursos=total_cursos)
 
-@app.route('/post/<post_id>')
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
 def exibir_post(post_id):
     post = Post.query.get(post_id)
+    if current_user == post.autor:
+        form = Form_Criar_Post() #A logica é a mesma para este formulário no contexto
+        if request.method == "GET":
+            form.titulo.data = post.titulo
+            form.corpo.data = post.corpo
+        if form.validate_on_submit():
+            post.titulo = form.titulo.data
+            post.corpo = form.corpo.data
+            database.session.add(post)
+            database.session.commit()
+            flash('Post editado com sucesso', 'alert-sucess')
+               
+    else:
+        form = None
 
-    return render_template('exibir_post.html', post=post)
+
+        
+
+    return render_template('exibir_post.html', post=post, form=form)
