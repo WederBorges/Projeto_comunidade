@@ -185,3 +185,20 @@ def exibir_post(post_id):
         
 
     return render_template('exibir_post.html', post=post, form=form)
+
+@app.route('/post/<post_id>/excluir', methods=['GET','POST'])
+@login_required
+def excluir_post(post_id):
+    post = Post.query.get(post_id)
+    if request.method == "POST":
+        acao = request.form.get('excluir_post')
+        if current_user == post.autor and acao == 'excluir':
+                database.session.delete(post)
+                database.session.commit()
+                print(request.form)
+        flash("Parabéns meu amigo, você excluiu um post", "alert-success")
+        return redirect(url_for('home'))
+    
+    flash('Algo de errado não está certo', 'alert-danger')
+    return redirect(url_for('home'))
+                

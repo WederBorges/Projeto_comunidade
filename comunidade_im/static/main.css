@@ -42,3 +42,38 @@
   background: #f2f5f8  
 
 }
+
+.brilho {
+  color: #ff8;
+  animation: mudarCor 2s infinite;
+}
+
+@keyframes mudarCor {
+  0%   { color: #ff8; }
+  25%  { color: #f0f; }
+  50%  { color: #8ff; }
+  75%  { color: #f8f; }
+  100% { color: #ff8; }
+}
+
+@keyframes brilhoAnimado {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.estrela {
+  animation: piscar 1s infinite;
+}
+
+@keyframes piscar {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
