@@ -11,10 +11,12 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 app.config['SECRET_KEY'] = '355fcc96736a56eb286df457be1f3597e6e4400d11baed7dccd4f23b76fd0da3262bb29aa85137b88972de87ee11cffca5cd'
 
 if os.getenv("DATABASE_URL"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")     
+    # Railway pode fornecer DATABASE_URL com postgres://, mas SQLAlchemy precisa postgresql://
+    database_url = os.getenv("DATABASE_URL").replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(base_dir,'comunidade.db')}"
-
+    
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
