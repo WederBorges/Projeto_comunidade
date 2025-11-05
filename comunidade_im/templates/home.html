@@ -10,7 +10,7 @@
 
     {% for post in posts %}
     <div class="row border mt-4 p-2 meupost">
-      <div class="col col-3 brilho">
+      <div class="col col-3 ">
           <h4><strong>{{post.autor.user_name}}</strong></h4>
           <div class="{{image}} pe-2">
             <img src= "{{url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_perfil))}}" class="rounded" width="180" >
