@@ -8,3 +8,4 @@ import os
 from PIL import Image
 
 print(current_user.cursos)
+print(current_user)
