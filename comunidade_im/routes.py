@@ -42,16 +42,13 @@ def login():
         usuario = Usuario.query.filter_by(email_cadastro=form_login.email_login.data).first()
         if usuario:
             try:
-                # Verificar se o hash está no formato correto (deve começar com $2b$ ou $2a$)
                 senha_hash = usuario.senha_cadastro
-                if not senha_hash or not isinstance(senha_hash, str):
-                    raise ValueError("Hash de senha inválido")
                 
-                # Verificar se o hash tem o formato correto do bcrypt
-                if not senha_hash.startswith(('$2a$', '$2b$', '$2y$')):
-                    raise ValueError("Hash não está no formato bcrypt")
+                # Verificar se o hash existe e não está vazio
+                if not senha_hash:
+                    raise ValueError("Hash de senha não encontrado")
                 
-                # Verificar senha com tratamento de erro para hash inválido
+                # Tentar verificar a senha diretamente (Flask-Bcrypt já trata o formato)
                 if bcrypt.check_password_hash(senha_hash, form_login.senha_login.data):
                     login_user(usuario, remember=form_login.lembrar_dados.data)
                     flash("Login realizado com sucesso", "success")
@@ -63,25 +60,40 @@ def login():
                 else:
                     flash("Falha no Login, email ou senha incorretos", "alert-danger")
             except (ValueError, TypeError) as e:
-                # Hash inválido ou corrompido no banco de dados
-                flash("Erro ao verificar senha. Por favor, recrie sua conta ou contate o administrador.", "alert-danger")
-                # Log do erro para debug
-                import logging
-                logging.error(f"Erro ao verificar senha para usuário {usuario.email_cadastro}: {e}")
-                logging.error(f"Hash armazenado: {senha_hash[:50] if senha_hash else 'None'}...")  # Log parcial do hash
+                # Erro específico do bcrypt (Invalid salt)
+                error_msg = str(e)
+                if "Invalid salt" in error_msg or "invalid" in error_msg.lower():
+                    flash("Erro ao verificar senha. Por favor, recrie sua conta ou contate o administrador.", "alert-danger")
+                    import logging
+                    logging.error(f"Hash inválido para usuário {usuario.email_cadastro}: {error_msg}")
+                    logging.error(f"Hash armazenado (primeiros 50 chars): {str(senha_hash)[:50] if senha_hash else 'None'}")
+                else:
+                    flash("Falha no Login, email ou senha incorretos", "alert-danger")
+            except Exception as e:
+                # Outros erros inesperados
+                error_msg = str(e)
+                # Verificar se é um erro de hash mesmo vindo de outra exceção
+                if "Invalid salt" in error_msg or "invalid" in error_msg.lower():
+                    flash("Erro ao verificar senha. Por favor, recrie sua conta ou contate o administrador.", "alert-danger")
+                    import logging
+                    logging.error(f"Hash inválido para usuário {usuario.email_cadastro}: {error_msg}")
+                else:
+                    flash("Erro inesperado ao fazer login. Tente novamente.", "alert-danger")
+                    import logging
+                    logging.error(f"Erro inesperado no login para {usuario.email_cadastro}: {e}")
         else:
             flash("Falha no Login, email ou senha incorretos", "alert-danger")
 
     elif 'botao_submit_criar_conta' in request.form and form_criar_conta.validate_on_submit():
-        # Garantir que o hash seja armazenado como string UTF-8
+        # Flask-Bcrypt 1.0.1 já retorna string, mas vamos garantir
         senha_cript = bcrypt.generate_password_hash(form_criar_conta.senha_cadastro.data)
-        # Converter bytes para string se necessário
+        # Converter para string se necessário (para compatibilidade)
         if isinstance(senha_cript, bytes):
             senha_cript = senha_cript.decode('utf-8')
         
-        usuario = Usuario(user_name=form_criar_conta.user_name.data, #Nome do usuario
-                         email_cadastro=form_criar_conta.email_cadastro.data, #Email do usuario 
-                         senha_cadastro=senha_cript) #Campo de senha
+        usuario = Usuario(user_name=form_criar_conta.user_name.data,
+                         email_cadastro=form_criar_conta.email_cadastro.data,
+                         senha_cadastro=senha_cript)
         database.session.add(usuario)
         database.session.commit()
         flash(f"Cadastro realizado com sucesso seja bem-vindo {form_criar_conta.user_name.data} !", "primary")
