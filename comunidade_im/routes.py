@@ -202,3 +202,6 @@ def excluir_post(post_id):
     flash('Algo de errado não está certo', 'alert-danger')
     return redirect(url_for('home'))
                 
+@app.route("/healthz")
+def health():
+    return "ok", 200
