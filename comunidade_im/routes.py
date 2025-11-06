@@ -40,14 +40,25 @@ def login():
     # primeiro: qual botão foi enviado?
     if 'botao_submit_login' in request.form and form_login.validate_on_submit():
         usuario = Usuario.query.filter_by(email_cadastro=form_login.email_login.data).first()
-        if usuario and bcrypt.check_password_hash(usuario.senha_cadastro, form_login.senha_login.data):
-            login_user(usuario, remember=form_login.lembrar_dados.data)
-            flash("Login realizado com sucesso", "success")
-            parametro_next = request.args.get('next')
-            if parametro_next:
-                return redirect(parametro_next)
-            else:
-                return redirect(url_for('home'))
+        if usuario:
+            try:
+                # Verificar senha com tratamento de erro para hash inválido
+                if bcrypt.check_password_hash(usuario.senha_cadastro, form_login.senha_login.data):
+                    login_user(usuario, remember=form_login.lembrar_dados.data)
+                    flash("Login realizado com sucesso", "success")
+                    parametro_next = request.args.get('next')
+                    if parametro_next:
+                        return redirect(parametro_next)
+                    else:
+                        return redirect(url_for('home'))
+                else:
+                    flash("Falha no Login, email ou senha incorretos", "alert-danger")
+            except (ValueError, TypeError) as e:
+                # Hash inválido ou corrompido no banco de dados
+                flash("Erro ao verificar senha. Por favor, recrie sua conta ou contate o administrador.", "alert-danger")
+                # Log do erro para debug
+                import logging
+                logging.error(f"Erro ao verificar senha para usuário {usuario.email_cadastro}: {e}")
         else:
             flash("Falha no Login, email ou senha incorretos", "alert-danger")
 
