@@ -42,8 +42,17 @@ def login():
         usuario = Usuario.query.filter_by(email_cadastro=form_login.email_login.data).first()
         if usuario:
             try:
+                # Verificar se o hash está no formato correto (deve começar com $2b$ ou $2a$)
+                senha_hash = usuario.senha_cadastro
+                if not senha_hash or not isinstance(senha_hash, str):
+                    raise ValueError("Hash de senha inválido")
+                
+                # Verificar se o hash tem o formato correto do bcrypt
+                if not senha_hash.startswith(('$2a$', '$2b$', '$2y$')):
+                    raise ValueError("Hash não está no formato bcrypt")
+                
                 # Verificar senha com tratamento de erro para hash inválido
-                if bcrypt.check_password_hash(usuario.senha_cadastro, form_login.senha_login.data):
+                if bcrypt.check_password_hash(senha_hash, form_login.senha_login.data):
                     login_user(usuario, remember=form_login.lembrar_dados.data)
                     flash("Login realizado com sucesso", "success")
                     parametro_next = request.args.get('next')
@@ -59,14 +68,20 @@ def login():
                 # Log do erro para debug
                 import logging
                 logging.error(f"Erro ao verificar senha para usuário {usuario.email_cadastro}: {e}")
+                logging.error(f"Hash armazenado: {senha_hash[:50] if senha_hash else 'None'}...")  # Log parcial do hash
         else:
             flash("Falha no Login, email ou senha incorretos", "alert-danger")
 
     elif 'botao_submit_criar_conta' in request.form and form_criar_conta.validate_on_submit():
+        # Garantir que o hash seja armazenado como string UTF-8
         senha_cript = bcrypt.generate_password_hash(form_criar_conta.senha_cadastro.data)
+        # Converter bytes para string se necessário
+        if isinstance(senha_cript, bytes):
+            senha_cript = senha_cript.decode('utf-8')
+        
         usuario = Usuario(user_name=form_criar_conta.user_name.data, #Nome do usuario
                          email_cadastro=form_criar_conta.email_cadastro.data, #Email do usuario 
-                         senha_cadastro= senha_cript) #Campo de senha
+                         senha_cadastro=senha_cript) #Campo de senha
         database.session.add(usuario)
         database.session.commit()
         flash(f"Cadastro realizado com sucesso seja bem-vindo {form_criar_conta.user_name.data} !", "primary")
